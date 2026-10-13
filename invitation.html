@@ -105,11 +105,13 @@
   .tl .time{flex:none;width:46px;text-align:left;font-size:13px;line-height:1.2;color:var(--ink-soft);padding-top:14px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
   .tl .dotwrap{flex:none;width:24px;margin:0 10px 0 0;display:flex;justify-content:center;padding-top:16px}
   .tl .dotwrap i{width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);display:block}
-  .tl .body{flex:1;min-width:0;background:var(--card);border-radius:12px;padding:11px 14px;box-shadow:0 3px 12px rgba(31,91,140,.08)}
+  .tl .body{flex:1;min-width:0;background:var(--card);border-radius:12px;border:1.5px solid transparent;padding:9.5px 12.5px;box-shadow:0 3px 12px rgba(31,91,140,.08);transition:border-color .2s}
   .tl .body b{display:block;color:var(--ink);font-size:15px;font-weight:600;line-height:22px}
+  .tl li{cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .tl .dotwrap i{transition:background .2s}
+  .tl li.on .dotwrap i{background:var(--ink)}
+  .tl li.on .body{border-color:var(--ink)}
   .tl .body span{display:block;font-size:12px;color:#6b7a89;margin-top:2px}
-  .tl li.hl .dotwrap i{background:var(--ink)}
-  .tl li.hl .body{border:1.5px solid var(--ink)}
   footer{text-align:center;font-size:11px;color:var(--ink-soft);padding:0 0 28px}
 </style>
 </head>
@@ -170,10 +172,10 @@
         <div class="dotwrap"><i></i></div>
         <div class="body"><b>놀이시간</b><span>다 같이 즐기는 게임 타임</span></div>
       </li>
-      <li class="hl">
+      <li>
         <div class="time">07:15</div>
         <div class="dotwrap"><i></i></div>
-        <div class="body"><b>경품추첨 ★</b><span>Lucky Draw! 동행인 이름도 잊지 마세요</span></div>
+        <div class="body"><b>경품추첨 ★</b><span>Lucky Draw 🍀 동행인 이름도 잊지 마세요</span></div>
       </li>
       <li>
         <div class="time">07:45</div>
@@ -193,7 +195,7 @@
     <div class="card">
       <h2>참석 여부를 알려주세요</h2>
       <p class="desc">
-        ★☆ Lucky Draw ★☆<br>
+        ★☆ Lucky Draw 🍀 ★☆<br>
         파티에 참석해주시는 분들을 위해<br>작은 이벤트를 준비했습니다.<br>
         인원 확정과 이름표 제작을 위해 꼭 응답해주세요.<br>
         동행인 이름도 적어주셔야 확률이 뻥튀기!
@@ -296,6 +298,21 @@
     form.classList.add("hidden");
     $("doneState").classList.remove("hidden");
   });
+
+  // 타임테이블: 항목을 누르면 동그라미가 채워지고 상자에 테두리가 생깁니다 (다시 누르면 해제)
+  (function tlSelect(){
+    const items = document.querySelectorAll(".tl li");
+    items.forEach(li => {
+      li.tabIndex = 0;
+      const toggle = () => {
+        const was = li.classList.contains("on");
+        items.forEach(x => x.classList.remove("on"));
+        if (!was) li.classList.add("on");
+      };
+      li.addEventListener("click", toggle);
+      li.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+    });
+  })();
 </script>
 </body>
 </html>
